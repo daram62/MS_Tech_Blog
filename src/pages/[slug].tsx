@@ -1,16 +1,16 @@
 import Detail from "src/routes/Detail"
-import { filterPosts } from "src/libs/utils/notion"
+import { filterPosts } from "src/libs/utils/posts"
 import { CONFIG } from "site.config"
 import { NextPageWithLayout } from "../types"
 import CustomError from "src/routes/Error"
-import { getRecordMap, getPosts } from "src/apis"
+import { getPostBySlug, getPosts } from "src/apis"
 import MetaConfig from "src/components/MetaConfig"
 import { GetStaticProps } from "next"
 import { queryClient } from "src/libs/react-query"
 import { queryKey } from "src/constants/queryKey"
 import { dehydrate } from "@tanstack/react-query"
 import usePostQuery from "src/hooks/usePostQuery"
-import { FilterPostsOptions } from "src/libs/utils/notion/filterPosts"
+import { FilterPostsOptions } from "src/libs/utils/posts/filterPosts"
 
 const filter: FilterPostsOptions = {
   acceptStatus: ["Public", "PublicOnDetail"],
@@ -23,12 +23,13 @@ export const getStaticPaths = async () => {
 
   return {
     paths: filteredPost.map((row) => `/${row.slug}`),
-    fallback: true,
+    fallback: false,
   }
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const slug = context.params?.slug
+  const slugParam = context.params?.slug
+  const slug = Array.isArray(slugParam) ? slugParam[0] : slugParam
 
   const posts = await getPosts()
   const feedPosts = filterPosts(posts)
@@ -36,18 +37,22 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   const detailPosts = filterPosts(posts, filter)
   const postDetail = detailPosts.find((t: any) => t.slug === slug)
-  const recordMap = await getRecordMap(postDetail?.id!)
+  const fullPost = postDetail?.slug
+    ? await getPostBySlug(postDetail.slug)
+    : null
 
-  await queryClient.prefetchQuery(queryKey.post(`${slug}`), () => ({
-    ...postDetail,
-    recordMap,
-  }))
+  if (!fullPost) {
+    return {
+      notFound: true,
+    }
+  }
+
+  await queryClient.prefetchQuery(queryKey.post(`${slug}`), () => fullPost)
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
-    revalidate: CONFIG.revalidateTime,
   }
 }
 

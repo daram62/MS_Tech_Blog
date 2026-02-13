@@ -11,14 +11,14 @@ import useScheme from "src/hooks/useScheme"
 const waitForMermaid = (interval = 100, timeout = 5000) => {
   return new Promise<HTMLCollectionOf<Element>>((resolve, reject) => {
     const startTime = Date.now()
-    const elements: HTMLCollectionOf<Element> =
-      document.getElementsByClassName("language-mermaid")
+      const elements: HTMLCollectionOf<Element> =
+        document.getElementsByClassName("language-mermaid")
 
     const checkMerMaidCode = () => {
       if (mermaid.render !== undefined && elements.length > 0) {
         resolve(elements)
       } else if (Date.now() - startTime >= timeout) {
-        reject(new Error(`mermaid is not defined within the timeout period.`))
+        resolve(elements)
       } else {
         setTimeout(checkMerMaidCode, interval)
       }
@@ -46,27 +46,34 @@ const useMermaidEffect = () => {
     waitForMermaid()
       .then(async (elements) => {
         const promises = Array.from(elements)
-          .filter((elements) => elements.tagName === "PRE")
+          .filter(
+            (element) => element.tagName === "PRE" || element.tagName === "CODE"
+          )
           .map(async (element, i) => {
+            const target =
+              element.tagName === "CODE" ? element.parentElement ?? element : element
+            const sourceText = element.textContent || ""
+
             if (memoMermaid.get(i) !== undefined) {
               const svg = await mermaid
                 .render("mermaid" + i, memoMermaid.get(i) || "")
                 .then((res) => res.svg)
-              element.animate(
+              target.animate(
                 [
                   { easing: "ease-in", opacity: 0 },
                   { easing: "ease-out", opacity: 1 },
                 ],
                 { duration: 300, fill: "both" }
               )
-              element.innerHTML = svg
+              target.innerHTML = svg
               return
             }
+
             const svg = await mermaid
-              .render("mermaid" + i, element.textContent || "")
+              .render("mermaid" + i, sourceText)
               .then((res) => res.svg)
-            setMemoMermaid(memoMermaid.set(i, element.textContent ?? ""))
-            element.innerHTML = svg
+            setMemoMermaid(memoMermaid.set(i, sourceText))
+            target.innerHTML = svg
           })
         await Promise.all(promises)
       })
