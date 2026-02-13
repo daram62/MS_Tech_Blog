@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { CONFIG } from "site.config"
 import { formatDate } from "src/libs/utils"
+import { withBasePath } from "src/libs/utils/assetPath"
 import Tag from "../../../components/Tag"
 import { TPost } from "../../../types"
 import Image from "next/image"
@@ -25,7 +26,7 @@ const PostCard: React.FC<Props> = ({ data }) => {
         {data.thumbnail && (
           <div className="thumbnail">
             <Image
-              src={data.thumbnail}
+              src={withBasePath(data.thumbnail)}
               fill
               alt={data.title}
               css={{ objectFit: "cover" }}
