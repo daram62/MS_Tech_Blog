@@ -8,13 +8,18 @@ type Props = {
 }
 
 const MobileProfileCard: React.FC<Props> = () => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
+  const profileSrc = CONFIG.profile.image.startsWith("/")
+    ? `${basePath}${CONFIG.profile.image}`
+    : CONFIG.profile.image
+
   return (
     <StyledWrapper>
       <div className="top">💻 Profile</div>
       <div className="mid">
         <div className="wrapper">
           <Image
-            src={CONFIG.profile.image}
+            src={profileSrc}
             width={90}
             height={90}
             css={{ position: "relative" }}

@@ -4,10 +4,13 @@ import { CONFIG } from "site.config"
 import styled from "@emotion/styled"
 
 const Logo = () => {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
+  const logoSrc = `${basePath}/images/shared/Microsoft-Logo-PNG-Photos.png`
+
   return (
     <StyledWrapper href="/" aria-label={CONFIG.blog.title}>
       <Image
-        src="/images/shared/Microsoft-Logo-PNG-Photos.png"
+        src={logoSrc}
         alt="Microsoft"
         width={28}
         height={28}
