@@ -2,6 +2,7 @@ import type { FC } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import styled from "@emotion/styled"
+import { slugifyHeading } from "src/libs/utils/markdown"
 
 import "prismjs/themes/prism-tomorrow.css"
 
@@ -11,6 +12,7 @@ type Props = {
 
 const MarkdownRenderer: FC<Props> = ({ content }) => {
   const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
+  const headingCounts = new Map<string, number>()
   const withBasePath = (url: string | null) => {
     if (!url) return url
     if (url.startsWith("http") || url.startsWith("#")) return url
@@ -18,9 +20,53 @@ const MarkdownRenderer: FC<Props> = ({ content }) => {
     return url
   }
 
+  const getHeadingId = (value: string) => {
+    const base = slugifyHeading(value)
+    if (!base) return undefined
+    const count = headingCounts.get(base) ?? 0
+    headingCounts.set(base, count + 1)
+    return count === 0 ? base : `${base}-${count}`
+  }
+
+  const toText = (node: any): string => {
+    if (typeof node === "string") return node
+    if (Array.isArray(node)) return node.map(toText).join("")
+    if (node && node.props && node.props.children) return toText(node.props.children)
+    return ""
+  }
+
   return (
     <StyledWrapper>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} urlTransform={withBasePath}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        urlTransform={withBasePath}
+        components={{
+          h1: ({ node, ...props }) => {
+            const id = getHeadingId(toText(props.children))
+            return <h1 id={id} {...props} />
+          },
+          h2: ({ node, ...props }) => {
+            const id = getHeadingId(toText(props.children))
+            return <h2 id={id} {...props} />
+          },
+          h3: ({ node, ...props }) => {
+            const id = getHeadingId(toText(props.children))
+            return <h3 id={id} {...props} />
+          },
+          h4: ({ node, ...props }) => {
+            const id = getHeadingId(toText(props.children))
+            return <h4 id={id} {...props} />
+          },
+          h5: ({ node, ...props }) => {
+            const id = getHeadingId(toText(props.children))
+            return <h5 id={id} {...props} />
+          },
+          h6: ({ node, ...props }) => {
+            const id = getHeadingId(toText(props.children))
+            return <h6 id={id} {...props} />
+          },
+        }}
+      >
         {content}
       </ReactMarkdown>
     </StyledWrapper>

@@ -12,14 +12,14 @@ const CONFIG = {
   },
   projects: [
     {
-      name: `MS Tech Blog`,
+      name: `Tech Blog`,
       href: "https://github.com/daram62/MS_Tech_Blog",
     },
   ],
   // blog setting (required)
   blog: {
-    title: "MS Tech Blog",
-    description: "welcome to MS Tech Blog!",
+    title: "Tech Blog",
+    description: "welcome to Minseo's Tech Blog!",
     scheme: "dark", // 'light' | 'dark' | 'system'
   },
 
