@@ -103,7 +103,8 @@ const parsePostFile = (fileName: string) => {
         if (typeof item === "string") {
           return { id: item, name: item }
         }
-        return { id: item.id || item.name || "", ...item }
+        const name = item.name || item.id || "Unknown"
+        return { id: item.id || name, name, profile_photo: item.profile_photo }
       })
     }
     return undefined
