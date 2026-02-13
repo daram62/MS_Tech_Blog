@@ -9,7 +9,7 @@ const POSTS_DIR = path.join(process.cwd(), "posts")
 
 type FrontMatter = {
   title?: string
-  date?: string
+  date?: string | Date
   tags?: string[] | string
   category?: string[] | string
   summary?: string
@@ -19,7 +19,7 @@ type FrontMatter = {
   slug?: string
   author?: { id?: string; name?: string; profile_photo?: string }[] | string[]
   fullWidth?: boolean
-  createdTime?: string
+  createdTime?: string | Date
 }
 
 const toArray = <T>(value: T | T[] | undefined): T[] => {
