@@ -8,6 +8,7 @@ tags:
 category:
   - "aitouragenthon"
 summary: "Copilot Studio 접속과 SharePoint 실습 환경을 준비합니다."
+thumbnail: "/images/posts/2026-02-12-chapter-01-setup/Chapter2.JPG"
 status: "Public"
 type: "Post"
 ---

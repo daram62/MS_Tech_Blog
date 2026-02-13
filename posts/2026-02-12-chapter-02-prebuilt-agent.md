@@ -8,6 +8,7 @@ tags:
 category:
   - "aitouragenthon"
 summary: "기본 제공 Pre-built Agent를 생성하고 테스트하는 흐름을 따라갑니다."
+thumbnail: "/images/posts/2026-02-12-chapter-02-prebuilt-agent/Chapter3.JPG"
 status: "Public"
 type: "Post"
 ---

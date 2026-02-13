@@ -8,6 +8,7 @@ tags:
 category:
   - "aitouragenthon"
 summary: "자연어 프롬프트와 Knowledge를 활용해 Custom Agent를 설계합니다."
+thumbnail: "/images/posts/2026-02-12-chapter-03-custom-agent/Chapter4.JPG"
 status: "Public"
 type: "Post"
 ---

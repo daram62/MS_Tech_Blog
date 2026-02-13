@@ -8,6 +8,7 @@ tags:
 category:
   - "aitouragenthon"
 summary: "Agent, LLM, Hallucination, RAG 핵심 개념을 빠르게 정리합니다."
+thumbnail: "/images/posts/2026-02-12-chapter-00-introduction/Chapter1.JPG"
 status: "Public"
 type: "Post"
 ---
