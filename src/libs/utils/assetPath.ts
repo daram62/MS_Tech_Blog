@@ -18,11 +18,32 @@ const resolveBasePath = () => {
 
 export const withBasePath = (url: string) => {
   if (!url) return url
-  if (url.startsWith("http") || url.startsWith("data:") || url.startsWith("#")) {
-    return url
+  const basePath = resolveBasePath()
+  if (url.startsWith("data:") || url.startsWith("#")) return url
+
+  if (url.startsWith("/")) {
+    if (basePath && (url === basePath || url.startsWith(`${basePath}/`))) return url
+    return basePath ? `${basePath}${url}` : url
   }
 
-  const basePath = resolveBasePath()
-  if (url.startsWith("/")) return `${basePath}${url}`
+  if (url.startsWith("http")) {
+    if (!basePath) return url
+    try {
+      const target = new URL(url)
+      const site = new URL(CONFIG.link)
+      if (target.origin === site.origin) {
+        if (
+          target.pathname !== basePath &&
+          !target.pathname.startsWith(`${basePath}/`)
+        ) {
+          target.pathname = `${basePath}${target.pathname}`.replace(/\/+/g, "/")
+        }
+        return target.toString()
+      }
+    } catch {
+      return url
+    }
+  }
+
   return url
 }
