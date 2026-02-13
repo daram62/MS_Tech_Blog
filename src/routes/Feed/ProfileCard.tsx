@@ -3,14 +3,12 @@ import Image from "next/image"
 import React from "react"
 import { CONFIG } from "site.config"
 import { Emoji } from "src/components/Emoji"
+import { withBasePath } from "src/libs/utils/assetPath"
 
 type Props = {}
 
 const ProfileCard: React.FC<Props> = () => {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
-  const profileSrc = CONFIG.profile.image.startsWith("/")
-    ? `${basePath}${CONFIG.profile.image}`
-    : CONFIG.profile.image
+  const profileSrc = withBasePath(CONFIG.profile.image)
 
   return (
     <StyledWrapper>

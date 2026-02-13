@@ -5,20 +5,13 @@ import { formatDate } from "src/libs/utils"
 import Image from "next/image"
 import React from "react"
 import styled from "@emotion/styled"
+import { withBasePath } from "src/libs/utils/assetPath"
 
 type Props = {
   data: TPost
 }
 
 const PostHeader: React.FC<Props> = ({ data }) => {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
-  const withBasePath = (url?: string) => {
-    if (!url) return url
-    if (url.startsWith("http") || url.startsWith("data:")) return url
-    if (url.startsWith("/")) return `${basePath}${url}`
-    return url
-  }
-
   return (
     <StyledWrapper>
       <h1 className="title">{data.title}</h1>
@@ -30,11 +23,9 @@ const PostHeader: React.FC<Props> = ({ data }) => {
                 <div className="author">
                   <Image
                     css={{ borderRadius: "50%" }}
-                    src={
-                      withBasePath(
-                        data.author[0].profile_photo || CONFIG.profile.image
-                      ) || ""
-                    }
+                    src={withBasePath(
+                      data.author[0].profile_photo || CONFIG.profile.image
+                    )}
                     alt="profile_photo"
                     width={24}
                     height={24}
@@ -63,7 +54,7 @@ const PostHeader: React.FC<Props> = ({ data }) => {
           {data.thumbnail && (
             <div className="thumbnail">
               <Image
-                src={withBasePath(data.thumbnail) || ""}
+                src={withBasePath(data.thumbnail)}
                 css={{ objectFit: "cover" }}
                 fill
                 alt={data.title}

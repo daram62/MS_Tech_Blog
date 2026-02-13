@@ -2,10 +2,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { CONFIG } from "site.config"
 import styled from "@emotion/styled"
+import { withBasePath } from "src/libs/utils/assetPath"
 
 const Logo = () => {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
-  const logoSrc = `${basePath}/images/shared/Microsoft-Logo-PNG-Photos.png`
+  const logoSrc = withBasePath("/images/shared/Microsoft-Logo-PNG-Photos.png")
 
   return (
     <StyledWrapper href="/" aria-label={CONFIG.blog.title}>

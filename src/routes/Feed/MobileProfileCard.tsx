@@ -2,16 +2,14 @@ import { CONFIG } from "site.config"
 import Image from "next/image"
 import React from "react"
 import styled from "@emotion/styled"
+import { withBasePath } from "src/libs/utils/assetPath"
 
 type Props = {
   className?: string
 }
 
 const MobileProfileCard: React.FC<Props> = () => {
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
-  const profileSrc = CONFIG.profile.image.startsWith("/")
-    ? `${basePath}${CONFIG.profile.image}`
-    : CONFIG.profile.image
+  const profileSrc = withBasePath(CONFIG.profile.image)
 
   return (
     <StyledWrapper>
