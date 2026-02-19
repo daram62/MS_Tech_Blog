@@ -7,25 +7,26 @@ type Props = {}
 
 const PageDetail: React.FC<Props> = () => {
   const data = usePostQuery()
-
-  if (!data) return null
-  // About 페이지라면 뱃지/버튼을 직접 렌더링
-  const isAbout = data.slug === "about"
+  // compute derived values with hooks unconditionally
   const contentWithoutBadgeAndButton = useMemo(() => {
+    if (!data) return ""
+    const isAbout = data.slug === "about"
     if (!isAbout) return data.content
     // Daily 뱃지와 View Resume 버튼이 있던 줄 제거
     return data.content
       .replace(/^Daily\s*$/m, "")
       .replace(/^\[View Resume\]\(.*\)$/m, "")
       .trim()
-  }, [data.content, isAbout])
+  }, [data?.content, data?.slug])
+
+  if (!data) return null
 
   return (
     <StyledWrapper>
       <div className="contentCard">
-        {isAbout && <Badge>Daily</Badge>}
+        {data.slug === "about" && <Badge>Daily</Badge>}
         <MarkdownRenderer content={contentWithoutBadgeAndButton} />
-        {isAbout && (
+        {data.slug === "about" && (
           <ResumeButton
             href="https://daram62.github.io/MS_Tech_Blog"
             target="_blank"

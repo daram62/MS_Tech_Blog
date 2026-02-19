@@ -17,13 +17,11 @@ const PostDetail: React.FC<Props> = () => {
   const data = usePostQuery()
   const posts = usePostsQuery()
   const [activeId, setActiveId] = useState<string | null>(null)
-  if (!data) return null
-
-  const category = (data.category && data.category?.[0]) || undefined
-  const headings = useMemo(() => parseHeadings(data.content, [2, 3]), [data.content])
+  const category = (data?.category && data?.category?.[0]) || undefined
+  const headings = useMemo(() => parseHeadings(data?.content ?? "", [2, 3]), [data?.content])
   const currentIndex = useMemo(
-    () => posts.findIndex((post) => post.slug === data.slug),
-    [posts, data.slug]
+    () => posts.findIndex((post) => post.slug === data?.slug),
+    [posts, data?.slug]
   )
   const prevPost = currentIndex > 0 ? posts[currentIndex - 1] : null
   const nextPost =
@@ -55,6 +53,8 @@ const PostDetail: React.FC<Props> = () => {
 
     return () => observer.disconnect()
   }, [headings])
+
+  if (!data) return null
 
   return (
     <StyledWrapper>

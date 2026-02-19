@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import mermaid from "mermaid"
-import { useEffect, useState } from "react"
+import { useEffect, useRef } from "react"
 import { queryKey } from "src/constants/queryKey"
 import useScheme from "src/hooks/useScheme"
 
@@ -27,7 +27,7 @@ const waitForMermaid = (interval = 100, timeout = 5000) => {
   })
 }
 const useMermaidEffect = () => {
-  const [memoMermaid, setMemoMermaid] = useState<Map<number, string>>(new Map())
+  const memoMermaidRef = useRef<Map<number, string>>(new Map())
 
   const { data, isFetched } = useQuery({
     queryKey: queryKey.scheme(),
@@ -54,9 +54,9 @@ const useMermaidEffect = () => {
               element.tagName === "CODE" ? element.parentElement ?? element : element
             const sourceText = element.textContent || ""
 
-            if (memoMermaid.get(i) !== undefined) {
+            if (memoMermaidRef.current.get(i) !== undefined) {
               const svg = await mermaid
-                .render("mermaid" + i, memoMermaid.get(i) || "")
+                .render("mermaid" + i, memoMermaidRef.current.get(i) || "")
                 .then((res) => res.svg)
               target.animate(
                 [
@@ -72,7 +72,7 @@ const useMermaidEffect = () => {
             const svg = await mermaid
               .render("mermaid" + i, sourceText)
               .then((res) => res.svg)
-            setMemoMermaid(memoMermaid.set(i, sourceText))
+            memoMermaidRef.current.set(i, sourceText)
             target.innerHTML = svg
           })
         await Promise.all(promises)

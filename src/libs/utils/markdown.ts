@@ -22,12 +22,16 @@ const stripMarkdown = (value: string) => {
 }
 
 export const parseHeadings = (content: string, levels: number[]) => {
+  if (typeof content !== "string" || !Array.isArray(levels) || levels.length === 0) {
+    return []
+  }
   const allowed = new Set(levels)
   const lines = content.split(/\r?\n/)
   const counts = new Map<string, number>()
   const headings: HeadingItem[] = []
 
   for (const line of lines) {
+    if (!line || typeof line !== "string") continue
     const match = /^(#{1,6})\s+(.+)$/.exec(line)
     if (!match) continue
 
