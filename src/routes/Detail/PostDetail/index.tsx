@@ -91,7 +91,8 @@ const PostDetail: React.FC<Props> = () => {
                     <strong>{prevPost.title}</strong>
                     <span className="meta">
                       {formatDate(
-                        prevPost?.date?.start_date || prevPost.createdTime
+                        prevPost?.date?.start_date || prevPost.createdTime,
+                        "ko-KR"
                       )}
                     </span>
                   </a>
@@ -107,7 +108,8 @@ const PostDetail: React.FC<Props> = () => {
                     <strong>{nextPost.title}</strong>
                     <span className="meta">
                       {formatDate(
-                        nextPost?.date?.start_date || nextPost.createdTime
+                        nextPost?.date?.start_date || nextPost.createdTime,
+                        "ko-KR"
                       )}
                     </span>
                   </a>
